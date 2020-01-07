@@ -1,8 +1,6 @@
 package me.ssoon.demospringsecurityform.form;
 
 import java.security.Principal;
-import me.ssoon.demospringsecurityform.account.AccountContext;
-import me.ssoon.demospringsecurityform.account.AccountRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,13 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SampleController {
 
   private final SampleService sampleService;
-  private final AccountRepository accountRepository;
 
-  public SampleController(
-      SampleService sampleService,
-      AccountRepository accountRepository) {
+  public SampleController(SampleService sampleService) {
     this.sampleService = sampleService;
-    this.accountRepository = accountRepository;
   }
 
   @GetMapping("/")
@@ -39,7 +33,6 @@ public class SampleController {
   @GetMapping("/dashboard")
   public String dashboard(Model model, Principal principal) {
     model.addAttribute("message", "Hello " + principal.getName());
-    AccountContext.setAccount(accountRepository.findByUsername(principal.getName()));
     sampleService.dashboard();
     return "dashboard";
   }

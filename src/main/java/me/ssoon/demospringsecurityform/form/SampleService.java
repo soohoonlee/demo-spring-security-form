@@ -1,15 +1,17 @@
 package me.ssoon.demospringsecurityform.form;
 
-import me.ssoon.demospringsecurityform.account.Account;
-import me.ssoon.demospringsecurityform.account.AccountContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SampleService {
 
   public void dashboard() {
-    Account account = AccountContext.getAccount();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     System.out.println("==============");
-    System.out.println("account = " + account.getUsername());
+    System.out.println("userDetails.getUsername() = " + userDetails.getUsername());
   }
 }
