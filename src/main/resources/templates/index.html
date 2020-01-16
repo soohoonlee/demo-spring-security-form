@@ -5,6 +5,14 @@
   <title>Index</title>
 </head>
 <body>
-  <h1 th:text="${message}">Hello</h1>
+<h1 th:text="${message}">Hello</h1>
+<div th:if="${#authorization.expr('isAuthenticated()')}">
+  <h2 th:text="${#authentication.name}">Name</h2>
+  <a href="/sign-out" th:href="@{/sign-out}">Sign Out</a>
+</div>
+<div th:unless="${#authorization.expr('isAuthenticated()')}">
+  <a href="/sign-up" th:href="@{/sign-up}">Sign Up</a>
+  <a href="/sign-in" th:href="@{/sign-in}">Sign In</a>
+</div>
 </body>
 </html>
