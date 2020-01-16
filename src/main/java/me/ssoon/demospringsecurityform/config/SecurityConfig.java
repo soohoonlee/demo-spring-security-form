@@ -1,5 +1,6 @@
 package me.ssoon.demospringsecurityform.config;
 
+import me.ssoon.demospringsecurityform.account.AccountService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -16,6 +17,12 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+  private final AccountService accountService;
+
+  public SecurityConfig(AccountService accountService) {
+    this.accountService = accountService;
+  }
 
   public SecurityExpressionHandler<FilterInvocation> expressionHandler() {
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -56,6 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               System.out.println(username + " is denied to access " + request.getRequestURI());
               response.sendRedirect("/access-denied");
             })
+        .and()
+          .rememberMe()
+            .userDetailsService(accountService)
+            .rememberMeParameter("my-remember-me")
+            .key("remember-me-sample")
         .and()
           .httpBasic()
         .and()
