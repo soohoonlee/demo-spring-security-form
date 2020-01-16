@@ -2,8 +2,10 @@ package me.ssoon.demospringsecurityform.form;
 
 import java.security.Principal;
 import java.util.concurrent.Callable;
+import me.ssoon.demospringsecurityform.account.Account;
+import me.ssoon.demospringsecurityform.book.BookRepository;
+import me.ssoon.demospringsecurityform.common.CurrentUser;
 import me.ssoon.demospringsecurityform.common.SecurityLogger;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +16,19 @@ public class SampleController {
 
   private final SampleService sampleService;
 
-  public SampleController(SampleService sampleService) {
+  private final BookRepository bookRepository;
+
+  public SampleController(SampleService sampleService, BookRepository bookRepository) {
     this.sampleService = sampleService;
+    this.bookRepository = bookRepository;
   }
 
   @GetMapping("/")
-  public String index(Model model, Principal principal) {
-    if (principal == null) {
+  public String index(Model model, @CurrentUser Account account) {
+    if (account == null) {
       model.addAttribute("message", "Hello Spring Security");
     } else {
-      model.addAttribute("message", "Hello, " + principal.getName());
+      model.addAttribute("message", "Hello, " + account.getUsername());
     }
     return "index";
   }
@@ -50,6 +55,7 @@ public class SampleController {
   @GetMapping("/user")
   public String user(Model model, Principal principal) {
     model.addAttribute("message", "Hello User, " + principal.getName());
+    model.addAttribute("books", bookRepository.findCurrentUserBooks());
     return "user";
   }
 
