@@ -50,7 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
           .logout()
             .logoutUrl("/sign-out")
-            .logoutSuccessUrl("/");
+            .logoutSuccessUrl("/")
+        .and()
+          .sessionManagement()
+            .sessionFixation()
+              .changeSessionId()
+            .maximumSessions(1)
+              .maxSessionsPreventsLogin(false);
 
     SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
   }
