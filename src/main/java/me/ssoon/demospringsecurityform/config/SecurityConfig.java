@@ -41,10 +41,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .expressionHandler(expressionHandler())
         .and()
           .formLogin()
+            .loginPage("/sign-in")
+            .usernameParameter("my-username")
+            .passwordParameter("my-password")
+            .permitAll()
         .and()
           .httpBasic()
         .and()
           .logout()
+            .logoutUrl("/sign-out")
             .logoutSuccessUrl("/");
 
     SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
